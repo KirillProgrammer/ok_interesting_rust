@@ -55,3 +55,20 @@ pub fn eat_at_restaurant() {
 	let order1 = back_of_house::Appetizer::Salad;
 	let order2 = back_of_house::Appetizer::Soup;
 }
+
+pub use crate::back_of_house::Appetizer; // теперь все модули могут использовать Appetizer
+
+pub fn eat_at_restaurant2() {
+    use crate::front_of_house::hosting;
+    // или 
+    // self::front_of_house::hosting;
+    use std::fmt::Result;
+    use std::io::Result as io_result;
+
+    // fn func1() -> Result {}
+
+    // fn func2() -> io_result<()> {}
+    let first = Appetizer::Soup;
+    
+    hosting::add_to_waitlist();
+}
