@@ -1,7 +1,6 @@
 use std::thread;
 use std::time::Duration;
-use std::collections::HashMap;
-
+use closures_and_iterators::Cacher;
 fn main() {
     let simulated_user_spec_value = 10;
 	let simulated_rand_num = 7;
@@ -19,11 +18,7 @@ fn generate_workout(intensity: u32, rand_num: u32) {
 		thread::sleep(Duration::from_secs(1));
 		num
 	});
-	// let expensive_closure = |num: u32| -> u32 {
-	// 	println!("вычисляется медленно...");
-	// 	thread::sleep(Duration::from_secs(1));
-	// 	num
-	// };
+
 	if intensity < 25 {
 		println!(
 			"Сегодня сделайте {} отжиманий",
@@ -42,36 +37,5 @@ fn generate_workout(intensity: u32, rand_num: u32) {
 				expensive_result.value(intensity)
 			);
 		}
-	}
-}
-
-struct Cacher<T>
-	where T: Fn(u32) -> u32,
-{
-	calculation: T,
-	value: HashMap<u32, u32>,
-}
-
-impl<T> Cacher<T>
-	where T: Fn(u32) -> u32
-{
-	fn new(calculation: T) -> Cacher<T> {
-		Cacher {
-			calculation,
-			value: HashMap::new(),
-		}
-	}
-	
-	fn value(&mut self, arg: u32) -> u32 {
-		let kar = self.value.get(&arg);
-		match kar {
-			Some(k) => *k,
-			None => {
-				let v = (self.calculation)(arg);
-				self.value.insert(v, v);
-				v
-			},
-		}
-
 	}
 }

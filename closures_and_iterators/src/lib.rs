@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-struct Cacher<T, V>
+pub struct Cacher<T, V>
 	where T: Fn(V) -> V,
 {
 	calculation: T,
@@ -12,17 +12,18 @@ impl<T, V> Cacher<T, V>
 	V: Eq + std::hash::Hash,
 	V: Eq + std::hash::Hash + Clone
 {
-	fn new(calculation: T) -> Cacher<T, V> {
+	pub fn new(calculation: T) -> Cacher<T, V> {
 		Cacher {
 			calculation,
 			value: HashMap::new(),
 		}
 	}
 	
-	fn value(&mut self, arg: V) -> V {
+	pub fn value(&mut self, arg: V) -> V {
 		let key = arg.clone();
-		let func_return = arg.clone();
-		self.value.entry(key).or_insert(arg);
+		let value = (self.calculation)(arg);
+		let func_return = value.clone();
+		self.value.entry(key).or_insert(value);
 		func_return
 	}
 }
